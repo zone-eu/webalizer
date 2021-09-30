@@ -58,6 +58,7 @@ int  parse_record_clf(char *);
 int  parse_record_ftp(char *);
 int  parse_record_squid(char *);
 int  parse_record_w3c(char *);
+int  parse_record_zone(char *);
 
 /*********************************************/
 /* FMT_LOGREC - terminate log fields w/zeros */
@@ -102,6 +103,7 @@ int parse_record(char *buffer)
       case LOG_FTP:   return parse_record_ftp(buffer);   break; /* ftp   */
       case LOG_SQUID: return parse_record_squid(buffer); break; /* squid */
       case LOG_W3C:   return parse_record_w3c(buffer);   break; /* w3c   */
+      case LOG_ZONE:  return parse_record_zone(buffer);  break; /* zone  */
    }
 }
 
@@ -737,4 +739,321 @@ int parse_record_w3c(char *buffer)
    strftime(log_rec.datetime, sizeof(log_rec.datetime),/* and format sting  */
      "[%d/%b/%Y:%H:%M:%S -0000]", local_time);         /* for log_rec field */
    return 1;
+}
+
+
+/*********************************************/
+/* PARSE_RECORD_ZONE - ZONE web log handler  */
+/*********************************************/
+
+// Possible input formats:
+//  - 2021-04-19T18:48:40.965109Z       (timezone offset is 'Z')
+//  - 2021-04-19T18:48:40.965109-0000   (timezone offset is '-HHMM')
+//  - 2021-04-19T18:48:40.965109+00:00  (timezone offset is '+HH:MM')
+//  - 2021-04-19T18:48:40.965109 +0000  (timezone offset is separated by space)
+//  - 2021-04-19T18:48:40Z              (no fractions of a second)
+//  - 2021-04-19 18:48:40.965109+0000   (date and time separated by space)
+//  - 2021-04-19:18:48:40.000+0000      (date and time separated by colon)
+//  - 2021-04-19 18:48:40               (no timezone offset - defaults to '+0000')
+//  - ... and some more possible combinations of the samples above...
+//
+// No validation is done on the actual date/time values of the input - this is done by Webalizer later.
+//
+// Output format:
+//  - [19/Apr/2021:18:48:40 +0000]
+
+static int zonedate_to_clfdate(const char *zone, char *clf, size_t clflen)
+{
+    const char *month[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    char *clfptr = clf;
+    const char *tzptr;
+
+    if (clflen < 29) {
+        return -1;
+    }
+
+    // Do some basic validation on the input date format
+    if (strlen(zone) < 19 || zone[4] != '-' || zone[7] != '-' || (zone[10] != 'T' && zone[10] != ' ' && zone[10] != ':') || zone[13] != ':' || zone[16] != ':') {
+        return -1;
+    }
+
+    *clfptr++ = '[';
+
+    // Day of month
+    *clfptr++ = zone[8];
+    *clfptr++ = zone[9];
+    *clfptr++ = '/';
+
+    // Month
+    if (zone[5] == '0') {
+        if (zone[6] >= '1' && zone[6] <= '9') {
+            strcpy(clfptr, month[zone[6] - '1']);
+        } else {
+            // Not a valid month
+            return -1;
+        }
+    } else if (zone[5] == '1') {
+        if (zone[6] >= '0' && zone[6] <= '2') {
+            strcpy(clfptr, month[9 + zone[6] - '0']);
+        } else {
+            // Not a valid month
+            return -1;
+        }
+    }
+    clfptr += 3;
+    *clfptr++ = '/';
+
+    // Year
+    *clfptr++ = zone[0];
+    *clfptr++ = zone[1];
+    *clfptr++ = zone[2];
+    *clfptr++ = zone[3];
+    *clfptr++ = ':';
+
+    // Time
+    *clfptr++ = zone[11];
+    *clfptr++ = zone[12];
+    *clfptr++ = ':';
+    *clfptr++ = zone[14];
+    *clfptr++ = zone[15];
+    *clfptr++ = ':';
+    *clfptr++ = zone[17];
+    *clfptr++ = zone[18];
+    *clfptr++ = ' ';
+
+    tzptr = &zone[19];
+
+    // Skip fractions of the second
+    if (*tzptr == '.') {
+        tzptr++;
+        while (isdigit(*tzptr)) tzptr++;
+    }
+
+    // Allow space before tzoffset
+    if (*tzptr == ' ') {
+        tzptr++;
+    }
+
+    // Copy and validate tzoffset, even though Webalizer ignores it...
+    if (*tzptr == '\0' || (*tzptr == 'Z' && *(tzptr + 1) == '\0')) {
+        // tzoff is missing or 'Z' - convert it to '+0000'
+        strncpy(clfptr, "+0000", 6); // copy \0 also, to get rid of the compiler warning
+        clfptr += 5;
+    } else if (*tzptr == '+' || *tzptr == '-') {
+        // tzoff is '+0000' or '+00:00' or '-0000' or '-00:00'
+        *clfptr++ = *tzptr++;
+        int tzofflen = 1;
+        int colon = 0;
+        while (*tzptr && tzofflen < 5) {
+            if (isdigit(*tzptr)) {
+                *clfptr++ = *tzptr++;
+                tzofflen++;
+            } else if (!colon && tzofflen == 3 && *tzptr == ':') {
+                // Skip possible ':' separator
+                tzptr++;
+                colon = 1;
+            } else {
+                // Well, this is pure illegal stuff going on here...
+                return -1;
+            }
+        }
+        if (tzofflen != 5) {
+            return -1;
+        }
+    } else {
+        return -1;
+    }
+
+    *clfptr++ = ']';
+    *clfptr++ = '\0';
+
+    return (clfptr - clf);
+}
+
+int parse_record_zone(char *buffer)
+{
+    char *cp1, *cp2, *cpx, *eob, *eos;
+    char *log_vhost;
+    char zonedatetime[32 + 1];
+
+    eob = buffer + strlen(buffer);         // calculate end of buffer
+    fmt_logrec(buffer);                    // separate fields with \0's
+
+    // If hostname is provided (-n option), then only accept log records for that name
+    if (hname) {
+        log_vhost = buffer;
+        if (strcasecmp(log_vhost, hname)) {
+            if (!strncasecmp(log_vhost, "www.", 4)) {
+                if (strcasecmp(&log_vhost[4], hname)) {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    cp1 = cpx = buffer;
+    while ( (*cp1 != '\0') && (cp1 < eob) ) cp1++;
+    if (cp1 < eob) cp1++;
+
+
+    // Date/time string in Zone format
+    cpx = cp1;
+    cp2 = zonedatetime;
+    eos = (cp1 + sizeof(zonedatetime) - 1);
+    if (eos >= eob) eos = eob - 1;
+
+    while ( (*cp1 != '\0') && (cp1 != eos) ) *cp2++ = *cp1++;
+    *cp2 = '\0';
+    if (*cp1 != '\0') {
+       if (verbose) {
+          fprintf(stderr,"%s",msg_big_date);
+          if (debug_mode) fprintf(stderr,": %s\n",cpx);
+          else fprintf(stderr,"\n");
+       }
+       while (*cp1 != '\0') cp1++;
+    }
+    if (cp1 < eob) cp1++;
+
+    // Convert Zone format to the format expected by Webalizer
+    if (zonedate_to_clfdate(zonedatetime, log_rec.datetime, sizeof(log_rec.datetime)) == -1) {
+        return 0;
+    }
+
+    if (cp1 >= eob) {
+        return 0;
+    }
+
+    // Remote host
+    cpx = cp1;
+    cp2 = log_rec.hostname;
+    eos = (cp1+MAXHOST-1);
+    if (eos >= eob) eos=eob-1;
+
+    while ( (*cp1 != '\0') && (cp1 != eos) ) *cp2++ = *cp1++;
+    *cp2 = '\0';
+    if (*cp1 != '\0') {
+       if (verbose) {
+          fprintf(stderr,"%s",msg_big_host);
+          if (debug_mode) fprintf(stderr,": %s\n",cpx);
+          else fprintf(stderr,"\n");
+       }
+       while (*cp1 != '\0') cp1++;
+    }
+    if (cp1 < eob) cp1++;
+
+    // Skip next field (port)
+    while ( (*cp1 != '\0') && (cp1 < eob) ) cp1++;
+    if (cp1 < eob) cp1++;
+
+    // Skip next field (ident)
+    while ( (*cp1 != '\0') && (cp1 < eob) ) cp1++;
+    if (cp1 < eob) cp1++;
+
+    // IDENT (authuser) field
+    cpx = cp1;
+    cp2 = log_rec.ident;
+    eos = (cp1+MAXIDENT-1);
+    if (eos >= eob) eos=eob-1;
+
+    while ( (*cp1 != '"') && (cp1 < eos) ) /* remove embeded spaces */
+    {
+       if (*cp1=='\0') *cp1=' ';
+       *cp2++=*cp1++;
+    }
+    *cp2--='\0';
+
+    if (cp1 >= eob) return 0;
+
+    // Check if oversized username
+    if (*cp1 != '"')
+    {
+       if (verbose)
+       {
+          fprintf(stderr,"%s",msg_big_user);
+          if (debug_mode) fprintf(stderr,": %s\n",cpx);
+          else fprintf(stderr,"\n");
+       }
+       while ( (*cp1 != '"') && (cp1 < eob) ) cp1++;
+    }
+
+    // Strip trailing space(s)
+    while (*cp2==' ') *cp2--='\0';
+
+    // HTTP request
+    cpx = cp1;
+    cp2 = log_rec.url;
+    eos = (cp1+MAXURL-1);
+    if (eos >= eob) eos = eob-1;
+
+    while ( (*cp1 != '\0') && (cp1 != eos) ) *cp2++ = *cp1++;
+    *cp2 = '\0';
+    if (*cp1 != '\0')
+    {
+       if (verbose)
+       {
+          fprintf(stderr,"%s",msg_big_req);
+          if (debug_mode) fprintf(stderr,": %s\n",cpx);
+          else fprintf(stderr,"\n");
+       }
+       while (*cp1 != '\0') cp1++;
+    }
+    if (cp1 < eob) cp1++;
+
+    if ( (log_rec.url[0] != '"') ||
+         (cp1 >= eob) ) return 0;
+
+    // Strip off HTTP version from URL
+    if ( (cp2=strstr(log_rec.url,"HTTP"))!=NULL )
+    {
+       *cp2='\0';          // Terminate string
+       *(--cp2)='"';       // change <sp> to "
+    }
+
+    // Response code
+    log_rec.resp_code = atoi(cp1);
+
+    // Response size
+    while ( (*cp1 != '\0') && (cp1 < eob) ) cp1++;
+    if (cp1 < eob) cp1++;
+    if (*cp1<'0'||*cp1>'9') log_rec.xfer_size=0;
+    else log_rec.xfer_size = strtoul(cp1,NULL,10);
+
+    // Done with CLF record?
+    if (cp1>=eob) return 1;
+
+    while ( (*cp1 != '\0') && (*cp1 != '\n') && (cp1 < eob) ) cp1++;
+    if (cp1 < eob) cp1++;
+
+    // Referrer if present
+    cpx = cp1;
+    cp2 = log_rec.refer;
+    eos = (cp1+MAXREF-1);
+    if (eos >= eob) eos = eob-1;
+
+    while ( (*cp1 != '\0') && (*cp1 != '\n') && (cp1 != eos) ) *cp2++ = *cp1++;
+    *cp2 = '\0';
+    if (*cp1 != '\0')
+    {
+       if (verbose)
+       {
+          fprintf(stderr,"%s",msg_big_ref);
+          if (debug_mode) fprintf(stderr,": %s\n",cpx);
+          else fprintf(stderr,"\n");
+       }
+       while (*cp1 != '\0') cp1++;
+    }
+    if (cp1 < eob) cp1++;
+
+    // Agent if present
+    cpx = cp1;
+    cp2 = log_rec.agent;
+    eos = cp1+(MAXAGENT-1);
+    if (eos >= eob) eos = eob-1;
+
+    while ( (*cp1 != '\0') && (cp1 != eos) ) *cp2++ = *cp1++;
+    *cp2 = '\0';
+
+    return 1;
 }

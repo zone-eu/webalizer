@@ -130,7 +130,7 @@ char *h_msg[]= {
          "-V        = print version information"           ,
          "-v        = be verbose"                          ,
          "-d        = print additional debug info"         ,
-         "-F type   = Log type.  type= (clf | ftp | squid | w3c)",
+         "-F type   = Log type.  type= (clf | ftp | squid | w3c | zone)",
          "-f        = Fold sequence errors"                ,
          "-i        = ignore history file"                 ,
          "-p        = preserve state (incremental)"        ,
