@@ -113,8 +113,8 @@ int     isipaddr(char *);                           /* is IP address test  */
 /*********************************************/
 
 char    *version     = "2.23";                /* program version          */
-char    *editlvl     = "08";                  /* edit level               */
-char    *moddate     = "26-Aug-2013";         /* modification date        */
+char    *editlvl     = "08-zone";             /* edit level               */
+char    *moddate     = "30-Sep-2021";         /* modification date        */
 char    *copyright   = "Copyright 1997-2013 by Bradford L. Barrett";
 
 int     verbose      = 2;                     /* 2=verbose,1=err, 0=none  */
@@ -1498,7 +1498,17 @@ int main(int argc, char *argv[])
    }
    else
    {
+      // Output empty history in case no data is available
+      if (hist[0].month == 0) {
+         time_t t = time(NULL);
+         struct tm *tm = localtime(&t);
+         cur_year = tm->tm_year + 1900;
+         cur_month = tm->tm_mon + 1;
+         update_history();
+      }
+
       if (hist[0].month!=0) write_main_index(); /* write main HTML file     */
+
       /* No valid records found... exit with error (1) */
       if (log_type == LOG_ZONE) {
           exit(0);
