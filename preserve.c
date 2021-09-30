@@ -65,7 +65,7 @@ struct hist_rec hist[HISTSIZE];              /* history structure array   */
 
 void get_history()
 {
-   int   i,n,numfields;
+   int   i,n;
    int   in_m,in_y;
    int   mth, yr;
    FILE  *hist_fp;
@@ -122,7 +122,7 @@ void get_history()
          if (i>=0)
          {
          /* month# year# requests files sites xfer firstday lastday */
-         numfields = sscanf(buffer,"%d %d %"PRIu64" %"PRIu64" %"PRIu64" %lf %d %d %"PRIu64" %"PRIu64"",
+         sscanf(buffer,"%d %d %"PRIu64" %"PRIu64" %"PRIu64" %lf %d %d %"PRIu64" %"PRIu64"",
                        &hist[i].month,
                        &hist[i].year,
                        &hist[i].hit,
@@ -647,6 +647,7 @@ int restore_state()
    {
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXURLH);
+      tmp_buf[MAXURLH]=0;
       tmp_buf[strlen(tmp_buf)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 10;  /* error exit */
@@ -678,6 +679,7 @@ int restore_state()
       /* Check for end of table */
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXHOST);
+      tmp_buf[MAXHOST]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 8;  /* error exit */
@@ -718,6 +720,7 @@ int restore_state()
       /* Check for end of table */
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXHOST);
+      tmp_buf[MAXHOST]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 9;  /* error exit */
@@ -757,6 +760,7 @@ int restore_state()
    {
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXREFH);
+      tmp_buf[MAXREFH]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 11;  /* error exit */
@@ -782,6 +786,7 @@ int restore_state()
    {
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXAGENT);
+      tmp_buf[MAXAGENT]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 12;  /* error exit */
@@ -807,6 +812,7 @@ int restore_state()
    {
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXSRCH);
+      tmp_buf[MAXSRCH]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 13;  /* error exit */
@@ -832,6 +838,7 @@ int restore_state()
       /* Check for end of table */
       if (!strncmp(buffer,"# End Of Table ",15)) break;
       strncpy(tmp_buf,buffer,MAXIDENT);
+      tmp_buf[MAXIDENT]=0;
       tmp_buf[strlen(buffer)-1]=0;
 
       if ((fgets(buffer,BUFSIZE,fp)) == NULL) return 14;  /* error exit */

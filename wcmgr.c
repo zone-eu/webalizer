@@ -658,7 +658,11 @@ void del_rec()
    }
 
    /* ensure IPv6 addresses are lowercase */
-   cp=addr; while (*cp!='\0') *cp++=tolower(*cp);
+   cp=addr;
+   while (*cp) {
+       *cp=tolower(*cp);
+       cp++;
+   }
 
    /* open the database (read-write) */
    if ((i=dns_db->open(dns_db, NULL, in_file, NULL, DB_HASH, 0, 0)))
@@ -721,10 +725,18 @@ void add_rec()
    }
 
    /* ensure everything is lowercase */
-   cp=addr; while (*cp!='\0') *cp++=tolower(*cp);
+   cp=addr;
+   while (*cp) {
+       *cp=tolower(*cp);
+       cp++;
+   }
    if (name[0]!='\0')
    {
-      cp=name; while (*cp!='\0') *cp++=tolower(*cp);
+      cp=name;
+      while (*cp) {
+          *cp=tolower(*cp);
+          cp++;
+      }
    }
 
    /* open the database (read-write) */
@@ -762,7 +774,7 @@ void add_rec()
       {
          /* check hostname */
          if (name[0]=='\0')
-            strncpy(name,addr,strlen(addr));
+            strncpy(name,addr,sizeof(name) - 1);
 
          /* check if perm */
          if (rec_ttl==0) runtime=0;

@@ -720,7 +720,6 @@ int pie_chart(char *fname, char *title, u_int64_t t_val,
 {
    int i,x,percent,y=47;
    double s_arc=0.0;
-   int purple_or_pie1, ltgreen_or_pie2, ltpurple_or_pie3, brown_or_pie4;
    int r, g, b;
    char buffer[128];
 
@@ -729,13 +728,13 @@ int pie_chart(char *fname, char *title, u_int64_t t_val,
    /* init graph and colors */
    init_graph(title,512,300);
    r=getred(pie_color1); g=getgreen(pie_color1); b=getblue(pie_color1);
-   purple_or_pie1  = gdImageColorAllocate(im, r, g, b);
+   gdImageColorAllocate(im, r, g, b);
    r=getred(pie_color2); g=getgreen(pie_color2); b=getblue(pie_color2);
-   ltgreen_or_pie2 = gdImageColorAllocate(im, r, g, b);
+   gdImageColorAllocate(im, r, g, b);
    r=getred(pie_color3); g=getgreen(pie_color3); b=getblue(pie_color3);
-   ltpurple_or_pie3= gdImageColorAllocate(im, r, g, b);
+   gdImageColorAllocate(im, r, g, b);
    r=getred(pie_color4); g=getgreen(pie_color4); b=getblue(pie_color4);
-   brown_or_pie4 = gdImageColorAllocate(im, r, g, b);
+   gdImageColorAllocate(im, r, g, b);
 
    /* do the circle... */
    gdImageArc(im, CX, CY, XRAD, YRAD, 0, 360, black);

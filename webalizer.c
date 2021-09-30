@@ -943,6 +943,7 @@ int main(int argc, char *argv[])
                {
                   /* Save query portion in log.rec.srchstr */
                   strncpy(log_rec.srchstr,(char *)cp1,MAXSRCH);
+                  log_rec.srchstr[MAXSRCH - 1] = '\0';
                   *cp1++='\0';
                   break;
                }
@@ -1075,7 +1076,8 @@ int main(int argc, char *argv[])
          }
 
          /* save hostname for later */
-         strncpy(host_buf, log_rec.hostname, sizeof(log_rec.hostname));
+         strncpy(host_buf, log_rec.hostname, sizeof(host_buf));
+         host_buf[sizeof(host_buf) - 1] = '\0';
 
 #ifdef USE_DNS
          /* Resolve IP address if needed */
@@ -1714,8 +1716,8 @@ void get_config(char *fname)
         case 26: add_nlist(value,&ignored_urls);   break; /* IgnoreURL      */
         case 27: add_nlist(value,&ignored_refs);   break; /* IgnoreReferrer */
         case 28: add_nlist(value,&ignored_agents); break; /* IgnoreAgent    */
-        case 29: if (tolower(value[0])=='y')
-                    verbose=0;                     break; /* ReallyQuiet    */
+        case 29: if (tolower(value[0])=='y') verbose=0;
+                                                   break; /* ReallyQuiet    */
         case 30: local_time=
                     (tolower(value[0])=='y')?0:1;  break; /* GMTTime        */
         case 31: add_glist(value,&group_urls);     break; /* GroupURL       */
@@ -1809,17 +1811,17 @@ void get_config(char *fname)
         case 88: link_referrer=
                     (tolower(value[0])=='y')?1:0;  break; /* LinkReferrer   */
         case 89: add_nlist(value,&page_prefix);    break; /* PagePrefix     */
-        case 90: strncpy(hit_color+1,  value, 6);  break; /* ColorHit       */
-        case 91: strncpy(file_color+1, value, 6);  break; /* ColorFile      */
-        case 92: strncpy(site_color+1, value, 6);  break; /* ColorSite      */
-        case 93: strncpy(kbyte_color+1,value, 6);  break; /* ColorKbyte     */
-        case 94: strncpy(page_color+1, value, 6);  break; /* ColorPage      */
-        case 95: strncpy(visit_color+1,value, 6);  break; /* ColorVisit     */
-        case 96: strncpy(misc_color+1, value, 6);  break; /* ColorMisc      */
-        case 97: strncpy(pie_color1+1, value, 6);  break; /* PieColor1      */
-        case 98: strncpy(pie_color2+1, value, 6);  break; /* PieColor2      */
-        case 99: strncpy(pie_color3+1, value, 6);  break; /* PieColor3      */
-        case 100:strncpy(pie_color4+1, value, 6);  break; /* PieColor4      */
+        case 90: strncpy(hit_color+1,  value, 6); hit_color[sizeof(hit_color) - 1] = '\0';    break; /* ColorHit       */
+        case 91: strncpy(file_color+1, value, 6); file_color[sizeof(file_color) - 1] = '\0';  break; /* ColorFile      */
+        case 92: strncpy(site_color+1, value, 6); site_color[sizeof(site_color) - 1] = '\0';  break; /* ColorSite      */
+        case 93: strncpy(kbyte_color+1,value, 6); kbyte_color[sizeof(kbyte_color) - 1] = '\0';break; /* ColorKbyte     */
+        case 94: strncpy(page_color+1, value, 6); page_color[sizeof(page_color) - 1] = '\0';  break; /* ColorPage      */
+        case 95: strncpy(visit_color+1,value, 6); visit_color[sizeof(visit_color) - 1] = '\0';break; /* ColorVisit     */
+        case 96: strncpy(misc_color+1, value, 6); misc_color[sizeof(misc_color) - 1] = '\0';  break; /* ColorMisc      */
+        case 97: strncpy(pie_color1+1, value, 6); pie_color1[sizeof(pie_color1) - 1] = '\0';  break; /* PieColor1      */
+        case 98: strncpy(pie_color2+1, value, 6); pie_color2[sizeof(pie_color2) - 1] = '\0';  break; /* PieColor2      */
+        case 99: strncpy(pie_color3+1, value, 6); pie_color3[sizeof(pie_color3) - 1] = '\0';  break; /* PieColor3      */
+        case 100:strncpy(pie_color4+1, value, 6); pie_color4[sizeof(pie_color4) - 1] = '\0';  break; /* PieColor4      */
 #ifdef USE_DNS
         case 101: cache_ips=
                     (tolower(value[0])=='y')?1:0;  break; /* CacheIPs       */
@@ -2153,7 +2155,8 @@ void srch_string(char *ptr)
       if ((cp1=(unsigned char *)strstr(ptr,srch))==NULL) return;
    }
    cp2=(unsigned char *)tmpbuf;
-   while (*cp1!='=' && *cp1!=0) cp1++; if (*cp1!=0) cp1++;
+   while (*cp1!='=' && *cp1!=0) cp1++;
+   if (*cp1!=0) cp1++;
    while (*cp1!='&' && *cp1!=0)
    {
       if (*cp1=='"' || *cp1==',' || *cp1=='?')

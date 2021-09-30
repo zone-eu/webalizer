@@ -836,7 +836,7 @@ void top_sites_table(int flag)
    while(cnt--)
    {
       /* calculate totals */
-      switch ( (int)((HNODEPTR)(*pointer)->flag) )
+      switch ( ((HNODEPTR)*pointer)->flag )
       {
          case OBJ_REG:   h_reg++;  break;
          case OBJ_GRP:   h_grp++;  break;
@@ -1026,7 +1026,7 @@ void top_urls_table(int flag)
    while (cnt--)
    {
       /* calculate totals */
-      switch ( (int)((UNODEPTR)(*pointer)->flag) )
+      switch ( ((UNODEPTR)*pointer)->flag )
       {
          case OBJ_REG:  u_reg++;  break;
          case OBJ_GRP:  u_grp++;  break;
@@ -1229,7 +1229,7 @@ void top_entry_table(int flag)
    cnt=a_ctr; pointer=u_array;
    while (cnt--)
    {
-      if ( (int)((UNODEPTR)(*pointer)->flag) == OBJ_REG )
+      if ( ((UNODEPTR)*pointer)->flag == OBJ_REG )
       {
          if ( (u_int64_t)(((UNODEPTR)(*pointer))->entry) )
             {  u_entry++; t_entry+=(u_int64_t)(((UNODEPTR)(*pointer))->entry); }
@@ -1333,7 +1333,7 @@ void top_refs_table()
    while(cnt--)
    {
       /* calculate totals */
-      switch ( (int)((RNODEPTR)(*pointer)->flag) )
+      switch ( ((RNODEPTR)*pointer)->flag )
       {
          case OBJ_REG:  r_reg++;  break;
          case OBJ_HIDE: r_hid++;  break;
@@ -1498,7 +1498,7 @@ void top_agents_table()
    while(cnt--)
    {
       /* calculate totals */
-      switch ( (int)((ANODEPTR)(*pointer)->flag) )
+      switch ( ((ANODEPTR)*pointer)->flag )
       {
          case OBJ_REG:   a_reg++;  break;
          case OBJ_GRP:   a_grp++;  break;
@@ -1765,7 +1765,7 @@ void top_users_table()
    while(cnt--)
    {
       /* calculate totals */
-      switch ( (int)((INODEPTR)(*pointer)->flag) )
+      switch ( ((INODEPTR)*pointer)->flag )
       {
          case OBJ_REG:   i_reg++;  break;
          case OBJ_GRP:   i_grp++;  break;
@@ -1952,7 +1952,9 @@ void top_ctry_table()
    extern GeoIP  *geo_fp;
    const  char   *geo_rc=NULL;
 #endif
+#if defined(USE_GEOIP) || defined(USE_DNS)
    char          geo_ctry[3]="--";
+#endif
 
    /* scan hash table adding up domain totals */
    for (i=0;i<MAXHASH;i++)
@@ -2908,4 +2910,3 @@ FILE *open_out_file(char *filename)
    }
    return out_fp;
 }
-

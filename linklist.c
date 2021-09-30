@@ -108,8 +108,8 @@ NLISTPTR new_nlist(char *str)
       if (verbose)
     fprintf(stderr,"[new_nlist] %s\n",msg_big_one);
    }
-   if (( newptr = malloc(sizeof(struct nlist))) != NULL)
-    {strncpy(newptr->string, str, sizeof(newptr->string));newptr->next=NULL;}
+   if (( newptr = calloc(1, sizeof(struct nlist))) != NULL)
+    {strncpy(newptr->string, str, sizeof(newptr->string) - 1);newptr->next=NULL;}
    return newptr;
 }
 
@@ -165,10 +165,10 @@ GLISTPTR new_glist(char *str, char *name)
       if (verbose)
 	fprintf(stderr,"[new_glist] %s\n",msg_big_one);
    }
-   if (( newptr = malloc(sizeof(struct glist))) != NULL)
+   if (( newptr = calloc(1, sizeof(struct glist))) != NULL)
      {
-       strncpy(newptr->string, str, sizeof(newptr->string));
-       strncpy(newptr->name, name, sizeof(newptr->name));
+       strncpy(newptr->string, str, sizeof(newptr->string) - 1);
+       strncpy(newptr->name, name, sizeof(newptr->name) - 1);
        newptr->next=NULL;
      }
    return newptr;
