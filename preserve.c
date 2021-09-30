@@ -28,6 +28,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <string.h>
 #include <unistd.h>                           /* normal stuff             */
 #include <ctype.h>
@@ -121,7 +122,7 @@ void get_history()
          if (i>=0)
          {
          /* month# year# requests files sites xfer firstday lastday */
-         numfields = sscanf(buffer,"%d %d %llu %llu %llu %lf %d %d %llu %llu",
+         numfields = sscanf(buffer,"%d %d %"PRIu64" %"PRIu64" %"PRIu64" %lf %d %d %"PRIu64" %"PRIu64"",
                        &hist[i].month,
                        &hist[i].year,
                        &hist[i].hit,
@@ -184,7 +185,7 @@ void put_history()
 
       for (i=HISTSIZE-1;i>=0;i--)
       {
-         fprintf(hist_fp,"%d %d %llu %llu %llu %.0f %d %d %llu %llu\n",
+         fprintf(hist_fp,"%d %d %"PRIu64" %"PRIu64" %"PRIu64" %.0f %d %d %"PRIu64" %"PRIu64"\n",
                          hist[i].month,
                          hist[i].year,
                          hist[i].hit,
@@ -361,20 +362,20 @@ int save_state()
    if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
 
    /* Monthly totals for sites, urls, etc... */
-   sprintf(buffer,"%llu %llu %llu %llu %llu %llu %.0f %llu %llu %llu\n",
+   sprintf(buffer,"%"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64" %"PRIu64"\n",
         t_hit, t_file, t_site, t_url,
         t_ref, t_agent, t_xfer, t_page, t_visit, t_user);
    if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
 
    /* Daily totals for sites, urls, etc... */
-   sprintf(buffer,"%llu %llu %llu %d %d\n",
+   sprintf(buffer,"%"PRIu64" %"PRIu64" %"PRIu64" %d %d\n",
         dt_site, ht_hit, mh_hit, f_day, l_day);
    if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
 
    /* Monthly (by day) total array */
    for (i=0;i<31;i++)
    {
-      sprintf(buffer,"%llu %llu %.0f %llu %llu %llu\n",
+      sprintf(buffer,"%"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64" %"PRIu64"\n",
         tm_hit[i],tm_file[i],tm_xfer[i],tm_site[i],tm_page[i],tm_visit[i]);
       if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
    }
@@ -382,7 +383,7 @@ int save_state()
    /* Daily (by hour) total array */
    for (i=0;i<24;i++)
    {
-      sprintf(buffer,"%llu %llu %.0f %llu\n",
+      sprintf(buffer,"%"PRIu64" %"PRIu64" %.0f %"PRIu64"\n",
         th_hit[i],th_file[i],th_xfer[i],th_page[i]);
       if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
    }
@@ -390,7 +391,7 @@ int save_state()
    /* Response codes */
    for (i=0;i<TOTAL_RC;i++)
    {
-      sprintf(buffer,"%llu\n",response[i].count);
+      sprintf(buffer,"%"PRIu64"\n",response[i].count);
       if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
    }
 
@@ -402,7 +403,7 @@ int save_state()
       uptr=um_htab[i];
       while (uptr!=NULL)
       {
-         snprintf(buffer,sizeof(buffer),"%s\n%d %llu %llu %.0f %llu %llu\n",
+         snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64"\n",
                   uptr->string, uptr->flag, uptr->count, uptr->files,
                   uptr->xfer, uptr->entry, uptr->exit);
          if (fputs(buffer,fp)==EOF) return 1;
@@ -419,7 +420,7 @@ int save_state()
       hptr=sm_htab[i];
       while (hptr!=NULL)
       {
-         snprintf(buffer,sizeof(buffer),"%s\n%d %llu %llu %.0f %llu %llu\n%s\n",
+         snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64"\n%s\n",
                   hptr->string, hptr->flag, hptr->count, hptr->files,
                   hptr->xfer, hptr->visit, hptr->tstamp,
                   (hptr->lasturl==blank_str)?"-":hptr->lasturl);
@@ -436,7 +437,7 @@ int save_state()
       hptr=sd_htab[i];
       while (hptr!=NULL)
       {
-         snprintf(buffer,sizeof(buffer),"%s\n%d %llu %llu %.0f %llu %llu\n%s\n",
+         snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64"\n%s\n",
                   hptr->string, hptr->flag, hptr->count, hptr->files,
                   hptr->xfer, hptr->visit, hptr->tstamp,
                   (hptr->lasturl==blank_str)?"-":hptr->lasturl);
@@ -455,7 +456,7 @@ int save_state()
          rptr=rm_htab[i];
          while (rptr!=NULL)
          {
-            snprintf(buffer,sizeof(buffer),"%s\n%d %llu\n",
+            snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64"\n",
                      rptr->string, rptr->flag, rptr->count);
             if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
             rptr=rptr->next;
@@ -473,7 +474,7 @@ int save_state()
          aptr=am_htab[i];
          while (aptr!=NULL)
          {
-            snprintf(buffer,sizeof(buffer),"%s\n%d %llu\n",
+            snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64"\n",
                      aptr->string, aptr->flag, aptr->count);
             if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
             aptr=aptr->next;
@@ -489,7 +490,7 @@ int save_state()
       sptr=sr_htab[i];
       while (sptr!=NULL)
       {
-         snprintf(buffer,sizeof(buffer),"%s\n%llu\n",
+         snprintf(buffer,sizeof(buffer),"%s\n%"PRIu64"\n",
                   sptr->string,sptr->count);
          if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
          sptr=sptr->next;
@@ -505,7 +506,7 @@ int save_state()
       iptr=im_htab[i];
       while (iptr!=NULL)
       {
-         snprintf(buffer,sizeof(buffer),"%s\n%d %llu %llu %.0f %llu %llu\n",
+         snprintf(buffer,sizeof(buffer),"%s\n%d %"PRIu64" %"PRIu64" %.0f %"PRIu64" %"PRIu64"\n",
                   iptr->string, iptr->flag, iptr->count, iptr->files,
               iptr->xfer, iptr->visit, iptr->tstamp);
          if (fputs(buffer,fp)==EOF) return 1;  /* error exit */
@@ -589,15 +590,15 @@ int restore_state()
    /* Get monthly totals */
    if ((fgets(buffer,BUFSIZE,fp)) != NULL)
    {
-      sscanf(buffer,"%llu %llu %llu %llu %llu %llu %lf %llu %llu %llu",
+      sscanf(buffer,"%"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64" %"PRIu64"",
        &t_hit, &t_file, &t_site, &t_url,
        &t_ref, &t_agent, &t_xfer, &t_page, &t_visit, &t_user);
    } else return 3;  /* error exit */
-     
+
    /* Get daily totals */
    if ((fgets(buffer,BUFSIZE,fp)) != NULL)
    {
-      sscanf(buffer,"%llu %llu %llu %d %d",
+      sscanf(buffer,"%"PRIu64" %"PRIu64" %"PRIu64" %d %d",
        &dt_site, &ht_hit, &mh_hit, &f_day, &l_day);
    } else return 4;  /* error exit */
 
@@ -606,7 +607,7 @@ int restore_state()
    {
       if ((fgets(buffer,BUFSIZE,fp)) != NULL)
       {
-         sscanf(buffer,"%llu %llu %lf %llu %llu %llu",
+         sscanf(buffer,"%"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64" %"PRIu64"",
           &tm_hit[i],&tm_file[i],&tm_xfer[i],&tm_site[i],&tm_page[i],
           &tm_visit[i]);
       } else return 5;  /* error exit */
@@ -617,7 +618,7 @@ int restore_state()
    {
       if ((fgets(buffer,BUFSIZE,fp)) != NULL)
       {
-         sscanf(buffer,"%llu %llu %lf %llu",
+         sscanf(buffer,"%"PRIu64" %"PRIu64" %lf %"PRIu64"",
           &th_hit[i],&th_file[i],&th_xfer[i],&th_page[i]);
       } else return 6;  /* error exit */
    }
@@ -626,7 +627,7 @@ int restore_state()
    for (i=0;i<TOTAL_RC;i++)
    {
       if ((fgets(buffer,BUFSIZE,fp)) != NULL)
-         sscanf(buffer,"%llu",&response[i].count);
+         sscanf(buffer,"%"PRIu64"",&response[i].count);
       else return 7;  /* error exit */
    }
 
@@ -652,7 +653,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 10;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu %llu %lf %llu %llu",
+      sscanf(buffer,"%d %"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64"",
          &t_unode.flag,&t_unode.count,
          &t_unode.files, &t_unode.xfer,
          &t_unode.entry, &t_unode.exit);
@@ -683,7 +684,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 8;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu %llu %lf %llu %llu",
+      sscanf(buffer,"%d %"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64"",
          &t_hnode.flag,&t_hnode.count,
          &t_hnode.files, &t_hnode.xfer,
          &t_hnode.visit, &t_hnode.tstamp);
@@ -723,7 +724,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 9;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu %llu %lf %llu %llu",
+      sscanf(buffer,"%d %"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64"",
           &t_hnode.flag,&t_hnode.count,
           &t_hnode.files, &t_hnode.xfer,
           &t_hnode.visit, &t_hnode.tstamp);
@@ -762,7 +763,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 11;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu",&t_rnode.flag,&t_rnode.count);
+      sscanf(buffer,"%d %"PRIu64"",&t_rnode.flag,&t_rnode.count);
 
       /* insert node */
       if (put_rnode(tmp_buf,t_rnode.flag,
@@ -787,7 +788,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 12;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu",&t_anode.flag,&t_anode.count);
+      sscanf(buffer,"%d %"PRIu64"",&t_anode.flag,&t_anode.count);
 
       /* insert node */
       if (put_anode(tmp_buf,t_anode.flag,t_anode.count,
@@ -812,7 +813,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 13;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%llu",&t_snode.count);
+      sscanf(buffer,"%"PRIu64"",&t_snode.count);
 
       /* insert node */
       if (put_snode(tmp_buf,t_snode.count,sr_htab))
@@ -837,7 +838,7 @@ int restore_state()
       if (!isdigit((unsigned char)buffer[0])) return 14;  /* error exit */
 
       /* load temporary node data */
-      sscanf(buffer,"%d %llu %llu %lf %llu %llu",
+      sscanf(buffer,"%d %"PRIu64" %"PRIu64" %lf %"PRIu64" %"PRIu64"",
          &t_inode.flag,&t_inode.count,
          &t_inode.files, &t_inode.xfer,
          &t_inode.visit, &t_inode.tstamp);

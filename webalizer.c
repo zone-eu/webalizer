@@ -35,6 +35,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>                           /* normal stuff             */
@@ -745,7 +746,7 @@ int main(int argc, char *argv[])
             total_bad++;                /* if a bad date, bump counter      */
             if (verbose)
             {
-               fprintf(stderr,"%s: %s [%llu]",
+               fprintf(stderr,"%s: %s [%"PRIu64"]",
                  msg_bad_date,log_rec.datetime,total_rec);
                if (debug_mode) fprintf(stderr,":\n%s\n",tmp_buf);
                else fprintf(stderr,"\n");
@@ -976,7 +977,7 @@ int main(int argc, char *argv[])
          /* if necessary, shrink referrer to fit storage */
          if (strlen(log_rec.refer)>=MAXREFH)
          {
-            if (verbose) fprintf(stderr,"%s [%llu]\n",
+            if (verbose) fprintf(stderr,"%s [%"PRIu64"]\n",
                 msg_big_ref,total_rec);
             log_rec.refer[MAXREFH-1]='\0';
          }
@@ -984,7 +985,7 @@ int main(int argc, char *argv[])
          /* if necessary, shrink URL to fit storage */
          if (strlen(log_rec.url)>=MAXURLH)
          {
-            if (verbose) fprintf(stderr,"%s [%llu]\n",
+            if (verbose) fprintf(stderr,"%s [%"PRIu64"]\n",
                 msg_big_req,total_rec);
             log_rec.url[MAXURLH-1]='\0';
          }
@@ -1403,7 +1404,7 @@ int main(int argc, char *argv[])
                total_bad++;
                if (verbose)
                {
-                  fprintf(stderr,"%s (%llu)",msg_bad_rec,total_rec);
+                  fprintf(stderr,"%s (%"PRIu64")",msg_bad_rec,total_rec);
                   if (debug_mode) fprintf(stderr,":\n%s\n",tmp_buf);
                   else fprintf(stderr,"\n");
                }
@@ -1455,14 +1456,14 @@ int main(int argc, char *argv[])
       /* display end of processing statistics */
       if (time_me || (verbose>1))
       {
-         printf("%llu %s ",total_rec, msg_records);
+         printf("%"PRIu64" %s ",total_rec, msg_records);
          if (total_ignore)
          {
-            printf("(%llu %s",total_ignore,msg_ignored);
-            if (total_bad) printf(", %llu %s) ",total_bad,msg_bad);
+            printf("(%"PRIu64" %s",total_ignore,msg_ignored);
+            if (total_bad) printf(", %"PRIu64" %s) ",total_bad,msg_bad);
                else        printf(") ");
          }
-         else if (total_bad) printf("(%llu %s) ",total_bad,msg_bad);
+         else if (total_bad) printf("(%"PRIu64" %s) ",total_bad,msg_bad);
 
          /* totoal processing time in seconds */
          temp_time = difftime(end_time, start_time);

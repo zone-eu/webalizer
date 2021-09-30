@@ -316,7 +316,7 @@ int dns_resolver(void *log_fp)
    if (time_me || (verbose>1))
    {
       if (verbose<2 && time_me) printf("DNS: ");
-      printf("%llu %s ",listEntries, msg_addresses);
+      printf("%"PRIu64" %s ",listEntries, msg_addresses);
 
       /* total processing time in seconds */
       temp_time = difftime(end_time,start_time);

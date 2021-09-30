@@ -30,6 +30,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <string.h>
 #include <locale.h>
 
@@ -352,7 +353,7 @@ void list_cache()
    {
       printf("------------------------------------------------------" \
              "-----------------------\n");
-      printf("Filename: %s  (%llu records)\n",in_file, t_rec);
+      printf("Filename: %s  (%"PRIu64" records)\n",in_file, t_rec);
    }
 }
 
@@ -486,7 +487,7 @@ void purge_cache()
    }
 
    if (verbose)
-      printf("%llu of %llu records purged from '%s'\n",t_exp,t_in,in_file);
+      printf("%"PRIu64" of %"PRIu64" records purged from '%s'\n",t_exp,t_in,in_file);
 }
 
 /*********************************************/
@@ -556,14 +557,14 @@ void stat_cache()
    printf("Report generated on: %s",ctime(&runtime));
    printf("DNS Cache Filename : %s\n",in_file);
 
-   printf("Total Records      : %llu\n",t_rec);
-   printf("Total Resolved     : %llu\n",t_name);
-   printf("Total Unresolved   : %llu\n",t_num);
-   printf("Total Permanent    : %llu\n",t_perm);
+   printf("Total Records      : %"PRIu64"\n",t_rec);
+   printf("Total Resolved     : %"PRIu64"\n",t_name);
+   printf("Total Unresolved   : %"PRIu64"\n",t_num);
+   printf("Total Permanent    : %"PRIu64"\n",t_perm);
    printf("Newest Record age  : %s\n",ttl_age(min_age,0));
    printf("Oldest Record age  : %s\n",ttl_age(max_age,0));
-   printf("Total over %02d days : %llu\n",rec_ttl,t_old);
-   if (t_err) printf("Record Size Errors : %llu\n",t_err);
+   printf("Total over %02d days : %"PRIu64"\n",rec_ttl,t_old);
+   if (t_err) printf("Record Size Errors : %"PRIu64"\n",t_err);
    printf("\n");
 }
 
@@ -852,7 +853,7 @@ void import_cache()
    else fprintf(stderr,"Error: File not found: %s\n",out_file);
    dns_db->close(dns_db,0);
 
-   if (verbose) printf("%llu records imported into '%s' from file '%s'\n",
+   if (verbose) printf("%"PRIu64" records imported into '%s' from file '%s'\n",
                        t_rec, in_file, out_file);
 }
 
@@ -936,7 +937,7 @@ void export_cache()
    dns_db->close(dns_db,0);
    fclose(out_fp);
 
-   if (verbose) printf("%llu records exported from '%s' to file '%s'\n",
+   if (verbose) printf("%"PRIu64" records exported from '%s' to file '%s'\n",
                        t_rec, in_file, out_file);
 }
 
