@@ -513,7 +513,7 @@ int month_graph6(     char  *fname,        /* filename           */
    sprintf(maxvaltxt, "%llu", maxval);
    gdImageStringUp(im, gdFontSmall,8,180+(strlen(maxvaltxt)*6),
                    (unsigned char *)maxvaltxt, black);
-   
+
    /* data 6 */
    for (i=0; i<31; i++)
    {
@@ -546,7 +546,7 @@ int month_graph6(     char  *fname,        /* filename           */
    sprintf(maxvaltxt, "%.0f", fmaxval/1024);
    gdImageStringUp(im, gdFontSmall,8,280+(strlen(maxvaltxt)*6),
                    (unsigned char *)maxvaltxt, black);
-   
+
    for (i=0; i<31; i++)
    {
       percent = data4[i] / fmaxval;
@@ -623,7 +623,7 @@ int day_graph3(     char  *fname,
    sprintf(maxvaltxt, "%llu", maxval);
    gdImageStringUp(im, gdFontSmall, 8, 26+(strlen(maxvaltxt)*6),
                    (unsigned char *)maxvaltxt, black);
-   
+
    if (graph_legend)                          /* print color coded legends? */
    {
       /* Pages/Files/Hits Legend */

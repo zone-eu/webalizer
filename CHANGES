@@ -121,7 +121,7 @@ Changes/Additions:
    config options, see the README file for complete descriptions.
 
  o Added language 'lang=' specification in generated HTML files.
-   
+
  o Added 'LinkReferrer' config option to allow/disallow links in the
    top referrers table.
 
@@ -324,7 +324,7 @@ Changes/Additions:
    keywords TopEntry (-e command line) and TopExit (-E command line)
    to specify the number of entries to display for each table.  The
    default for both is 10.  See README for additional information.
-   
+
  o Added 'Group' labels.  Allows display of a specified label for
    grouped entries (in 'Top' tables).  Based on patch submitted
    by Oliver Graf (ograf@rhein-zeitung.de).  See sample.conf for
@@ -350,7 +350,7 @@ Changes/Additions:
    the default of 'web'.
 
  o Changed graphs to handle pages and visits totals. Also  added
-   color coded legends, which can be disabled using the GraphLegend 
+   color coded legends, which can be disabled using the GraphLegend
    configuration keyword (-L command line option).  Default is to
    display them.
 

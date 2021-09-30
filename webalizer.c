@@ -116,7 +116,7 @@ char    *editlvl     = "08";                  /* edit level               */
 char    *moddate     = "26-Aug-2013";         /* modification date        */
 char    *copyright   = "Copyright 1997-2013 by Bradford L. Barrett";
 
-int     verbose      = 2;                     /* 2=verbose,1=err, 0=none  */ 
+int     verbose      = 2;                     /* 2=verbose,1=err, 0=none  */
 int     debug_mode   = 0;                     /* debug mode flag          */
 int     time_me      = 0;                     /* timing display flag      */
 int     local_time   = 1;                     /* 1=localtime 0=GMT (UTC)  */
@@ -208,7 +208,7 @@ int        cur_year=0, cur_month=0,           /* year/month/day/hour      */
            cur_min=0, cur_sec=0;
 
 u_int64_t  cur_tstamp=0;                      /* Timestamp...             */
-u_int64_t  rec_tstamp=0;  
+u_int64_t  rec_tstamp=0;
 u_int64_t  req_tstamp=0;
 u_int64_t  epoch;                             /* used for timestamp adj.  */
 
@@ -254,7 +254,7 @@ CLISTPTR   *top_ctrys    = NULL;              /* Top countries table      */
 #define    GZ_BUFSIZE 16384                   /* our_getfs buffer size    */
 char       f_buf[GZ_BUFSIZE];                 /* our_getfs buffer         */
 char       *f_cp=f_buf+GZ_BUFSIZE;            /* pointer into the buffer  */
-int        f_end=0;                           /* count to end of buffer   */ 
+int        f_end=0;                           /* count to end of buffer   */
 
 char    hit_color[]   = "#00805c";            /* graph hit color          */
 char    file_color[]  = "#0040ff";            /* graph file color         */
@@ -1035,7 +1035,7 @@ int main(int argc, char *argv[])
 
          /* adjust last day processed if different */
          if (rec_day > l_day) l_day = rec_day;
- 
+
          /* update min/sec stuff */
          if (cur_sec != rec_sec) cur_sec = rec_sec;
          if (cur_min != rec_min) cur_min = rec_min;
@@ -1195,7 +1195,7 @@ int main(int argc, char *argv[])
          /* now save in the various hash tables... */
          if (log_rec.resp_code==RC_OK || log_rec.resp_code==RC_PARTIALCONTENT)
             i=1; else i=0;
-         
+
          /* URL/ident hash table (only if valid response code) */
          if ((log_rec.resp_code==RC_OK)||(log_rec.resp_code==RC_NOMOD)||
              (log_rec.resp_code==RC_PARTIALCONTENT))
@@ -1269,7 +1269,7 @@ int main(int argc, char *argv[])
          tm_hit[rec_day-1]++;                       /* daily hits total     */
          th_xfer[rec_hour] += log_rec.xfer_size;    /* hourly xfer total    */
          th_hit[rec_hour]++;                        /* hourly hits total    */
-   
+
          /* if RC_OK, increase file counters */
          if (log_rec.resp_code == RC_OK)
          {
@@ -1290,7 +1290,7 @@ int main(int argc, char *argv[])
          }
 
          /*********************************************/
-         /* RECORD PROCESSED - DO GROUPS HERE         */ 
+         /* RECORD PROCESSED - DO GROUPS HERE         */
          /*********************************************/
 
          /* URL Grouping */
@@ -1828,7 +1828,7 @@ void get_config(char *fname)
         case 104: geodb_fname=save_opt(value);     break; /* GeoDBDatabase  */
 #else
         case 101: /* Disable CacheIPs/CacheTTL/GeoDB/GeoDBDatabase if none  */
-        case 102: 
+        case 102:
         case 103:
         case 104: printf("%s '%s' (%s)\n",msg_bad_key,keyword,fname); break;
 #endif  /* USE_DNS */
@@ -2141,7 +2141,7 @@ void srch_string(char *ptr)
 
    /* Check if search engine referrer or return  */
    if ( (cps=(unsigned char *)isinglist(search_list,log_rec.refer))==NULL)
-      return; 
+      return;
 
    /* Try to find query variable */
    srch[0]='?'; srch[sizeof(srch)-1] = '\0';
@@ -2312,7 +2312,7 @@ void agent_mangle(char *str)
          *cp2='\0';
       }
       else
-      { 
+      {
          cp1=strstr(str,"Mozilla");  /* Netscape flavor      */
          if (cp1!=NULL)
          {

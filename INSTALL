@@ -48,7 +48,7 @@ associated header file is required.
 http://www.oracle.com/technology/products/berkeley-db/
 
 For BZip2 support, the bzip2 compression library and header file is
-required. http://www.bzip.org/ 
+required. http://www.bzip.org/
 
 For GeoIP geolocation support, the GeoIP library (by MaxMind, Inc.)
 and header file is required, along with a Country Edition database.
@@ -337,4 +337,3 @@ A: This most often occurs when the GD library was built with
          and the GD graphic stuff will be statically linked into
          The Webalizer, eliminating any other library dependencies
          that the normal, shared library on my system may have.
-

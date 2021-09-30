@@ -468,7 +468,7 @@ int parse_record_squid(char *buffer)
       }
    }
    else while ( (*cp1 != '\0') && (cp1 != eos) ) *cp2++ = *cp1++;
- 
+
    *cp2 = '\0';
    if ((*cp1 != '\0' && trimsquid==0) || (trimsquid && slash_count) )
    {
@@ -511,7 +511,7 @@ int parse_record_squid(char *buffer)
 
 /* field index structure */
 struct  field_index_struct
-{  
+{
    int date;       /* Date field index                */
    int time;       /* Time field index                */
    int ip;         /* IP field index                  */
@@ -528,7 +528,7 @@ struct  field_index_struct
 
 /* field structure */
 struct  fields_struct
-{  
+{
    char *date;     /* Date field       */
    char *time;     /* Time field       */
    char *ip;       /* IP field         */
@@ -575,7 +575,7 @@ int parse_record_w3c(char *buffer)
 
    cp = buffer;
 
-   /* Check if the line is empty or a line suffers from the IIS 
+   /* Check if the line is empty or a line suffers from the IIS
       Null-Character bug and abort parsing if found. */
    if (*cp == '\0') return 0;
 
@@ -604,7 +604,7 @@ int parse_record_w3c(char *buffer)
             if (!strcmp(cp, "sc-bytes"))       field_index.size     = index;
             if (!strcmp(cp, "cs(User-Agent)")) field_index.agent    = index;
             if (!strcmp(cp, "cs-username"))    field_index.username = index;
-            
+
             /* Continue with the next field */
             while (*cp) cp++;
             cp++;
@@ -629,10 +629,10 @@ int parse_record_w3c(char *buffer)
       index++;
    }
    if (index-1 != field_index.fields) return 0;
-   
+
    /* Reset pointer */
    cp = buffer;
-   
+
    /* Reset the field pointers and begin parsing the data line */
    memset(&fields, 0, sizeof(struct fields_struct));
    index = 1;
@@ -650,13 +650,13 @@ int parse_record_w3c(char *buffer)
       if (index == field_index.size)     fields.size      = cp;
       if (index == field_index.agent)    fields.agent     = cp;
       if (index == field_index.username) fields.username  = cp;
-      
+
       /* Continue with the next data field */
       while (*cp) cp++;
       cp++;
       index++;
    }
-   
+
    /* Save URL */
    if (fields.url)
    {
@@ -677,16 +677,16 @@ int parse_record_w3c(char *buffer)
 
    /* Save hostname */
    if (fields.ip) strncpy(log_rec.hostname, fields.ip, MAXHOST - 1);
-      
+
    /* Save response code */
    if (fields.status) log_rec.resp_code = atoi(fields.status);
-   
+
    /* Save referer */
    if (fields.referer) strncpy(log_rec.refer, fields.referer, MAXREF - 1);
-   
+
    /* Save transfer size */
    if (fields.size) log_rec.xfer_size = strtoul(fields.size, NULL, 10);
-   
+
    /* Save user agent */
    if (fields.agent)
    {
@@ -694,10 +694,10 @@ int parse_record_w3c(char *buffer)
       while (*cp) { if (*cp=='+') *cp=' '; cp++; }
       strncpy(log_rec.agent, fields.agent, MAXAGENT - 1);
    }
-   
+
    /* Save auth username */
    if (fields.username) strncpy(log_rec.ident, fields.username, MAXIDENT - 1);
-   
+
    /* Parse date and time and save it */
    if (fields.date)
    {
@@ -724,7 +724,7 @@ int parse_record_w3c(char *buffer)
       fields.time++;
       gm_time.tm_sec = atoi(fields.time);
    }
-   
+
    /* Convert GMT to localtime */
    gm_time.tm_isdst = -1;                              /* force dst check   */
    timestamp = mktime(&gm_time);                       /* get time in sec   */

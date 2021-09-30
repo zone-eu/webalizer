@@ -725,7 +725,7 @@ General Configuration Keywords
 
 LogFile       This defines the log file to use. It should be a fully qualified
               name (ie: contain the path), but relative names will work as
-              well.  If not specified, the logfile defaults to STDIN. 
+              well.  If not specified, the logfile defaults to STDIN.
 
 LogType       This specified the log file type being used.  Normally, The
               Webalizer processes web logs in either CLF or Combined format.
@@ -941,7 +941,7 @@ IndexAlias    This allows additional 'index.html' aliases to be defined.
               every alias defined.  You don't have to specify 'index.' as
               it is always the default (unless disabled with the config
               option "DefaultIndex" described below).
-              Command line argument: -I 
+              Command line argument: -I
 
 DefaultIndex  This option is used to enable/disable the use of "index." as
               a default index name to be stripped from the end of a URL.
@@ -1074,7 +1074,7 @@ TopAgents     This allows you to specify how many "Top" user agents are
               specify a value of zero (0).  The display of user agents
               will only work if your web server includes this information
               in its log file (ie: a combined log format file).
-              Command line argument: -A 
+              Command line argument: -A
 
 AllAgents     Will cause a separate HTML page to be generated for all
               normally visible User Agents.  A link will be added to
@@ -1086,7 +1086,7 @@ TopCountries  This allows you to specify how many "Top" countries are
               displayed in the "Top Countries" table.  The default is
               30.  If you want to disable the countries table, specify
               a value of zero (0).
-              Command line argument: -C 
+              Command line argument: -C
 
 TopReferrers  This allows you to specify how many "Top" referrers are
               displayed in the "Top Referrers" table.  The default is
@@ -1094,7 +1094,7 @@ TopReferrers  This allows you to specify how many "Top" referrers are
               a value of zero (0).  The display of referrer information
               will only work if your web server includes this information
               in its log file (ie: a combined log format file).
-              Command line argument: -R 
+              Command line argument: -R
 
 AllReferrers  Will cause a separate HTML page to be generated for all
               normally visible Referrers.  A link will be added to the
@@ -1105,7 +1105,7 @@ TopSites      This allows you to specify how many "Top" sites are
               displayed in the "Top Sites" table.  The default is 30.
               If you want to disable the sites table, specify a value
               of zero (0).
-              Command line argument: -S 
+              Command line argument: -S
 
 TopKSites     Identical to TopSites, except for the 'by KByte' table.
               Default is 10.  No command line switch for this one.
@@ -1119,7 +1119,7 @@ TopURLs       This allows you to specify how many "Top" URLs are
               displayed in the "Top URLs" table.  The default is 30.
               If you want to disable the URLs table, specify a value
               of zero (0).
-              Command line argument: -U 
+              Command line argument: -U
 
 TopKURLs      Identical to TopURLs, except for the 'by KByte' table.
               Default is 10.  No command line switch for this one.
@@ -1184,7 +1184,7 @@ HideAgent     This allows specified user agents to be hidden from the
               listing.  This keyword is useless if 1) your log file does
               not provide user agent information or 2) you disable the
               user agent table.
-              Command line argument: -a 
+              Command line argument: -a
 
 HideReferrer  This allows you to hide specified referrers from the
               "Top Referrers" table.  Normally, you would only specify
@@ -1193,14 +1193,14 @@ HideReferrer  This allows you to hide specified referrers from the
               this keyword is useless if 1) your log file does not include
               referrer information or 2) you disable the top referrers
               table.
-              Command line argument: -r 
+              Command line argument: -r
 
 HideSite      This allows you to hide specified sites from the "Top
               Sites" table.  Normally, you would only specify your own
               web server or other local machines to be hidden, as they
               are usually the highest hitters of your web site, especially
               if you have their browsers home page pointing to it.
-              Command line argument: -s 
+              Command line argument: -s
 
 HideAllSites  This allows hiding all individual sites from the display,
               which can be useful when a lot of groupings are being
@@ -1214,7 +1214,7 @@ HideURL       This allows you to hide URLs from the "Top URLs" table.
               Normally, this is used to hide items such as graphic files,
               audio files or other 'non-html' files that are transferred
               to the visiting user.
-              Command line argument: -u 
+              Command line argument: -u
 
 HideUser      This allows you to hide Usernames from the "Top Usernames"
               table.  Usernames are only available if you use http based
@@ -1781,14 +1781,14 @@ mv /var/lib/httpd/logs/error_log  `echo $OLD_ERROR_LOG`
 /bin/gzip $OLD_ACCESS_LOG
 /bin/gzip $OLD_ERROR_LOG
 ------------------------- end of file ------------------------------------
- 
+
 This script first stops the web server using a 'kill' command.  Apache
 keeps the PID of the server in the file httpd.pid, so we use it as the
 argument for the kill.  Next, it defines some names for the backup files,
 which are basically the name of the files with the date and time appended
 to the end of them.  It then makes a copy of the log file, appended with
 '.backup' in the log directory, moves the current log files to an archive
-directory (/var/lib/httpd/logs/old) and restarts the server.  This setup 
+directory (/var/lib/httpd/logs/old) and restarts the server.  This setup
 allows the web server to be down for the minimum amount of time needed,
 which is important for busy sites.  If you don't want to stop the server,
 you can remove the initial 'kill' command, and replace the '/usr/sbin/httpd'
@@ -1831,7 +1831,7 @@ If you want The Webalizer to be run more often than once a month, you
 can specify additional crontab entries to do this as well.  Care should
 be taken however to ensure that The Webalizer is not running when the
 end of month processing above occurs, or unpredictable results may
-happen (such as an inability to rotate the logs due to a file lock). 
+happen (such as an inability to rotate the logs due to a file lock).
 The easiest way is to run it on the half hour with a crontab entry like:
 
 30 * * * *      /usr/bin/webalizer

@@ -1,5 +1,5 @@
 Begin3
-Title:         The Webalizer 
+Title:         The Webalizer
 Version:       2.20
 Entered-date:  01JUN2008
 Description:   A fast, free web server log file analysis program.  Produces
@@ -17,8 +17,8 @@ Description:   A fast, free web server log file analysis program.  Produces
                W3C format logs, all of which can be either in standard text
                format or compressed using gzip or bzip2.
 Keywords:      Web Analysis, Log Analysis, Linux, Unix, apache, wcmgr, GeoDB
-Author:        Bradford L. Barrett 
-Maintained-by: Bradford L. Barrett 
+Author:        Bradford L. Barrett
+Maintained-by: Bradford L. Barrett
 Primary-site:  http://www.webalizer.org/
 Original-site: ftp://ftp.webalizer.org/pub/webalizer/
 Platforms:     Linux/Unix, OS/2, Win32, MacOSX, POSIX

@@ -89,43 +89,43 @@
 #define IDX_CONTINUE           1
 #define IDX_SWITCHPROTO        2
 #define IDX_OK                 3
-#define IDX_CREATED            4 
-#define IDX_ACCEPTED           5 
-#define IDX_NONAUTHINFO        6 
-#define IDX_NOCONTENT          7  
-#define IDX_RESETCONTENT       8 
-#define IDX_PARTIALCONTENT     9 
-#define IDX_MULTIPLECHOICES    10 
-#define IDX_MOVEDPERM          11 
-#define IDX_MOVEDTEMP          12 
-#define IDX_SEEOTHER           13 
-#define IDX_NOMOD              14 
-#define IDX_USEPROXY           15 
+#define IDX_CREATED            4
+#define IDX_ACCEPTED           5
+#define IDX_NONAUTHINFO        6
+#define IDX_NOCONTENT          7
+#define IDX_RESETCONTENT       8
+#define IDX_PARTIALCONTENT     9
+#define IDX_MULTIPLECHOICES    10
+#define IDX_MOVEDPERM          11
+#define IDX_MOVEDTEMP          12
+#define IDX_SEEOTHER           13
+#define IDX_NOMOD              14
+#define IDX_USEPROXY           15
 #define IDX_MOVEDTEMPORARILY   16
-#define IDX_BAD                17 
-#define IDX_UNAUTH             18 
-#define IDX_PAYMENTREQ         19 
-#define IDX_FORBIDDEN          20 
-#define IDX_NOTFOUND           21 
-#define IDX_METHODNOTALLOWED   22 
-#define IDX_NOTACCEPTABLE      23 
-#define IDX_PROXYAUTHREQ       24 
-#define IDX_TIMEOUT            25 
-#define IDX_CONFLICT           26 
-#define IDX_GONE               27 
-#define IDX_LENGTHREQ          28 
-#define IDX_PREFAILED          29 
-#define IDX_REQENTTOOLARGE     30 
-#define IDX_REQURITOOLARGE     31 
+#define IDX_BAD                17
+#define IDX_UNAUTH             18
+#define IDX_PAYMENTREQ         19
+#define IDX_FORBIDDEN          20
+#define IDX_NOTFOUND           21
+#define IDX_METHODNOTALLOWED   22
+#define IDX_NOTACCEPTABLE      23
+#define IDX_PROXYAUTHREQ       24
+#define IDX_TIMEOUT            25
+#define IDX_CONFLICT           26
+#define IDX_GONE               27
+#define IDX_LENGTHREQ          28
+#define IDX_PREFAILED          29
+#define IDX_REQENTTOOLARGE     30
+#define IDX_REQURITOOLARGE     31
 #define IDX_UNSUPMEDIATYPE     32
 #define IDX_RNGNOTSATISFIABLE  33
-#define IDX_EXPECTATIONFAILED  34 
-#define IDX_SERVERERR          35 
-#define IDX_NOTIMPLEMENTED     36 
-#define IDX_BADGATEWAY         37 
-#define IDX_UNAVAIL            38 
-#define IDX_GATEWAYTIMEOUT     39 
-#define IDX_BADHTTPVER         40 
+#define IDX_EXPECTATIONFAILED  34
+#define IDX_SERVERERR          35
+#define IDX_NOTIMPLEMENTED     36
+#define IDX_BADGATEWAY         37
+#define IDX_UNAVAIL            38
+#define IDX_GATEWAYTIMEOUT     39
+#define IDX_BADHTTPVER         40
 #define TOTAL_RC               41
 
 #ifdef USE_DNS
@@ -166,7 +166,7 @@ extern char    *editlvl     ;                 /* edit level               */
 extern char    *moddate     ;                 /* modification date        */
 extern char    *copyright   ;
 
-extern int     verbose      ;                 /* 2=verbose,1=err, 0=none  */ 
+extern int     verbose      ;                 /* 2=verbose,1=err, 0=none  */
 extern int     debug_mode   ;                 /* debug mode flag          */
 extern int     time_me      ;                 /* timing display flag      */
 extern int     local_time   ;                 /* 1=localtime 0=GMT (UTC)  */

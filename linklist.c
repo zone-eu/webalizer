@@ -96,7 +96,7 @@ NLISTPTR page_prefix   = NULL;                /* page view prefixes       */
 GLISTPTR search_list   = NULL;                /* Search engine list       */
 
 /*********************************************/
-/* NEW_NLIST - create new linked list node   */ 
+/* NEW_NLIST - create new linked list node   */
 /*********************************************/
 
 NLISTPTR new_nlist(char *str)
@@ -130,7 +130,7 @@ int add_nlist(char *str, NLISTPTR *list)
          while(cptr!=NULL) { pptr=cptr; cptr=cptr->next; };
          pptr->next = newptr;
       }
-   } 
+   }
    return newptr==NULL;
 }
 
@@ -152,7 +152,7 @@ void del_nlist(NLISTPTR *list)
 }
 
 /*********************************************/
-/* NEW_GLIST - create new linked list node   */ 
+/* NEW_GLIST - create new linked list node   */
 /*********************************************/
 
 GLISTPTR new_glist(char *str, char *name)
@@ -212,7 +212,7 @@ int add_glist(char *str, GLISTPTR *list)
          while(cptr!=NULL) { pptr=cptr; cptr=cptr->next; };
          pptr->next = newptr;
       }
-   } 
+   }
    return newptr==NULL;
 }
 

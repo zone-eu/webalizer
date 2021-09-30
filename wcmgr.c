@@ -321,7 +321,7 @@ void list_cache()
       printf("--------------- ------------- ------------------------" \
              "-----------------------\n");
    }
-      
+
    /* initalize data areas */
    memset(&q, 0, sizeof(DBT));
    memset(&r, 0, sizeof(DBT));
@@ -334,7 +334,7 @@ void list_cache()
       t_rec++;
       memset(ip_buf, 0, sizeof(ip_buf));
       strncpy(ip_buf, q.data, (q.size>47)?47:q.size);  /* save IP address  */
-      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);          
+      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);
 
       if (dns_rec.numeric) t_num++;
       printf("%-15s [%s] %s\n",ip_buf,
@@ -438,7 +438,7 @@ void purge_cache()
    {
       /* got a record */
       t_in++;
-      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);          
+      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);
 
       /* get record ttl age */
       if (dns_rec.timeStamp==0) age=0;
@@ -484,7 +484,7 @@ void purge_cache()
       fprintf(stderr,"Error renaming file: %s\n",strerror(errno));
       exit(1);
    }
-   
+
    if (verbose)
       printf("%llu of %llu records purged from '%s'\n",t_exp,t_in,in_file);
 }
@@ -600,7 +600,7 @@ void find_rec()
       /* We found it! display info */
       memset(ip_buf, 0, sizeof(ip_buf));
       strncpy(ip_buf, q.data, (q.size>47)?47:q.size);  /* save IP address  */
-      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);          
+      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);
 
       if (verbose)
       {
@@ -920,7 +920,7 @@ void export_cache()
       t_rec++;
       memset(ip_buf, 0, sizeof(ip_buf));
       strncpy(ip_buf, q.data, (q.size>47)?47:q.size);  /* save IP address  */
-      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);          
+      memcpy(&dns_rec, r.data, (r.size>DNSZ)?DNSZ:r.size);
 
       /* Print out tab delimited line          */
       /* Format: IP timestamp numeric hostname */

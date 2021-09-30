@@ -76,7 +76,7 @@ graphs.o:	graphs.c graphs.h webalizer.h lang.h
 	$(CC) ${CFLAGS} ${DEFS} -c graphs.c
 
 wcmgr:	wcmgr.o
-	$(CC) ${LDFLAGS} -o wcmgr wcmgr.o ${WCMGR_LIBS} 
+	$(CC) ${LDFLAGS} -o wcmgr wcmgr.o ${WCMGR_LIBS}
 
 wcmgr.o:	wcmgr.c webalizer.h
 	$(CC) ${CFLAGS} ${DEFS} -c wcmgr.c

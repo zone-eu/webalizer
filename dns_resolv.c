@@ -191,7 +191,7 @@ int dns_resolver(void *log_fp)
          unlink(dns_cache);  /* remove it so we can recreate... */
       }
    }
-  
+
    /* open cache file */
    if ( (db_create(&dns_db, NULL, 0) != 0)   ||
         (dns_db->open(dns_db, NULL,
@@ -284,7 +284,7 @@ int dns_resolver(void *log_fp)
    verbose = save_verbose;     /* restore verbosity level... */
 
    listEntries = 0;
-  
+
    /* build our linked list l_list  */
    for(i=0;i < MAXHASH; i++)
    {
@@ -355,17 +355,17 @@ static void process_list(DNODEPTR l_list)
    int    nof_children = 0;
    fd_set rd_set;
    char   hbuf[NI_MAXHOST];
-  
+
    struct sigaction sigChildAction;
-  
+
    sigChildAction.sa_handler = sigChild;
    sigChildAction.sa_flags   = SA_NOCLDSTOP|SA_RESTART;
    sigemptyset(&sigChildAction.sa_mask);
 
    raiseSigChild = 0;
-  
+
    sigaction(SIGCHLD, &sigChildAction, NULL);
-  
+
    /* fire up our child processes */
    for(i=0; i < dns_children; i++)
    {
@@ -389,7 +389,7 @@ static void process_list(DNODEPTR l_list)
             if (verbose) fprintf(stderr,"FORK error");
             return;  /* exit(1); */
          }
-	  
+
          case 0:             /* Child */
          {
             int size;
@@ -443,14 +443,14 @@ static void process_list(DNODEPTR l_list)
             }
             close(child[i].inpipe[1]);
             close(child[i].outpipe[0]);
-		
+
             if(debug_mode)
-               printf( "Child %d got closed input, shutting down\n", i);  
+               printf( "Child %d got closed input, shutting down\n", i);
 
             fflush(stdout);
             exit(0);
          }  /* case 0 */
-		
+
          default:
          {
             child[i].pid = pid;
@@ -471,7 +471,7 @@ static void process_list(DNODEPTR l_list)
       static struct timeval selectTimeval;
       int res;
       int max_fd;
-	  
+
       FD_ZERO(&rd_set);
       max_fd = 0;
 
@@ -566,7 +566,7 @@ static void process_list(DNODEPTR l_list)
          {
             if(debug_mode)
             printf("tick\n");
-		
+
             break;
          }
 
@@ -698,7 +698,7 @@ static void db_put(char *key, char *value, int numeric)
 
    /* Align to multiple of eight bytes */
    int recSize = (sizeof(struct dnsRecord)+nameLen+7) & ~0x7;
-	
+
    /* make sure we have a db ;) */
    if(dns_db)
    {
@@ -766,7 +766,7 @@ int open_cache()
          unlink(dns_cache);  /* remove it so we can recreate... */
       }
    }
-  
+
    /* open cache file */
    if ( (db_create(&dns_db, NULL, 0) != 0)   ||
         (dns_db->open(dns_db, NULL,

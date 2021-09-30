@@ -16,20 +16,20 @@ extern GLISTPTR group_refs    ;
 extern GLISTPTR group_agents  ;
 extern GLISTPTR group_users   ;
 extern NLISTPTR hidden_sites  ;               /* "hidden" lists           */
-extern NLISTPTR hidden_urls   ;       
-extern NLISTPTR hidden_refs   ;       
-extern NLISTPTR hidden_agents ;       
-extern NLISTPTR hidden_users  ;       
+extern NLISTPTR hidden_urls   ;
+extern NLISTPTR hidden_refs   ;
+extern NLISTPTR hidden_agents ;
+extern NLISTPTR hidden_users  ;
 extern NLISTPTR ignored_sites ;               /* "Ignored" lists          */
-extern NLISTPTR ignored_urls  ;       
-extern NLISTPTR ignored_refs  ;       
-extern NLISTPTR ignored_agents;       
-extern NLISTPTR ignored_users ;       
+extern NLISTPTR ignored_urls  ;
+extern NLISTPTR ignored_refs  ;
+extern NLISTPTR ignored_agents;
+extern NLISTPTR ignored_users ;
 extern NLISTPTR include_sites ;               /* "Include" lists          */
-extern NLISTPTR include_urls  ;       
-extern NLISTPTR include_refs  ;       
-extern NLISTPTR include_agents;       
-extern NLISTPTR include_users ;       
+extern NLISTPTR include_urls  ;
+extern NLISTPTR include_refs  ;
+extern NLISTPTR include_agents;
+extern NLISTPTR include_users ;
 extern NLISTPTR index_alias   ;               /* index. aliases            */
 extern NLISTPTR html_pre      ;               /* before anything else :)   */
 extern NLISTPTR html_head     ;               /* top HTML code             */

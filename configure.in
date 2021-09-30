@@ -281,7 +281,7 @@ dnl ------------------------------------------
 
 LANG_CACHE=yes
 AC_ARG_WITH(language,
-  [  --with-language=name    Use language 'name' (default is english)], 
+  [  --with-language=name    Use language 'name' (default is english)],
   WEBALIZER_LANG="${withval}"; LANG_CACHE=no, LANG_CACHE=yes)
 if test "$WEBALIZER_LANG" = "no"; then WEBALIZER_LANG=english; fi
 

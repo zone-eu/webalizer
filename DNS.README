@@ -292,4 +292,3 @@ Special thanks to Henning P. Schmiedehausen <hps@tanstaafl.de> for the
 original dns-resolver code he submitted,  which was the basis for this
 implementation.  Also thanks to Jose Carlos Medeiros for the inital IPv6
 support code.
-
