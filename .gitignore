@@ -1,0 +1,10 @@
+/autom4te.cache
+/configure
+/config.log
+/config.status
+/Makefile
+/webalizer_lang.h
+*.o
+/wcmgr
+/webalizer
+/webazolver
