@@ -73,7 +73,7 @@
 #endif  /* USE_DNS */
 
 #ifdef USE_GEOIP
-#include <GeoIP.h>
+#include <maxminddb.h>
 #endif
 
 #ifdef USE_BZIP
@@ -173,7 +173,7 @@ char    *flag_dir    = "flags";               /* location of flag icons   */
 #ifdef USE_GEOIP
 int     geoip        = 0;                     /* Use GeoIP (0=no)         */
 char    *geoip_db    = NULL;                  /* GeoIP database filename  */
-GeoIP   *geo_fp      = NULL;                  /* GeoIP database handle    */
+MMDB_s  geo_fp;                               /* GeoIP database handle    */
 #endif
 
 int     ntop_sites   = 30;                    /* top n sites to display   */
@@ -619,24 +619,22 @@ int main(int argc, char *argv[])
    /* open GeoIP database */
    if (geoip)
    {
-      if (geoip_db!=NULL)
-         geo_fp=GeoIP_open(geoip_db, GEOIP_MEMORY_CACHE);
-      else
-         geo_fp=GeoIP_new(GEOIP_MEMORY_CACHE);
-
-      /* Did we open one? */
-      if (geo_fp==NULL)
-      {
-         /* couldn't open.. warn user */
-         if (verbose) printf("GeoIP %s\n",msg_geo_nolu);
-         geoip=0;
+      if (geoip_db != NULL) {
+         int mmdb_status = MMDB_open(geoip_db, 0, &geo_fp);
+         if (mmdb_status != MMDB_SUCCESS) {
+             geoip = 0;
+             if (verbose) {
+                 printf("MMDB_open failed: %s\n", MMDB_strerror(mmdb_status));
+             }
+         }
+      } else {
+         geoip = 0;
+         if (verbose) {
+             printf("No GeoIP database defined\n");
+         }
       }
-      else if (verbose>1) printf("%s %s (%s)\n",msg_geo_use,
-         GeoIPDBDescription[(int)geo_fp->databaseType],
-         (geoip_db==NULL)?msg_geo_dflt:geo_fp->file_path);
-   }
+  }
 #endif /* USE_GEOIP */
-
    /* Creating output in ... */
    if (verbose>1)
       printf("%s %s\n",msg_dir_use,out_dir?out_dir:msg_cur_dir);
@@ -1490,7 +1488,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_GEOIP
       /* Close GeoIP database */
-      if (geo_fp) GeoIP_delete(geo_fp);
+      if (geoip) MMDB_close(&geo_fp);
 #endif
 
       /* Whew, all done! Exit with completion status (0) */

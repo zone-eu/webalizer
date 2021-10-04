@@ -55,7 +55,7 @@
 #endif
 
 #ifdef USE_GEOIP
-#include <GeoIP.h>
+#include <maxminddb.h>
 #endif
 
 #include "webalizer.h"                        /* main header              */
@@ -1949,8 +1949,8 @@ void top_ctry_table()
 
 #ifdef USE_GEOIP
    extern int    geoip;
-   extern GeoIP  *geo_fp;
-   const  char   *geo_rc=NULL;
+   extern MMDB_s geo_fp;
+   MMDB_lookup_result_s geo_rc;
 #endif
 #if defined(USE_GEOIP) || defined(USE_DNS)
    char          geo_ctry[3]="--";
@@ -1983,20 +1983,22 @@ void top_ctry_table()
 #ifdef USE_GEOIP
                if (geoip)
                {
-                  /* Lookup IP address here,  turn into idx  */
-                  geo_rc=GeoIP_country_code_by_addr(geo_fp, hptr->string);
-                  if (geo_rc==NULL||geo_rc[0]=='\0'||geo_rc[0]=='-')
-                  {
-                     if (debug_mode)
-                        fprintf(stderr,"GeoIP: %s unknown (returns '%s')\n",
-                                hptr->string,(geo_rc==NULL)?"null":geo_rc);
-                  }
-                  else
-                  {
-                     /* index returned geo_ctry */
-                     geo_ctry[0]=tolower(geo_rc[0]);
-                     geo_ctry[1]=tolower(geo_rc[1]);
-                     idx=ctry_idx(geo_ctry);
+                  /* Lookup IP address here, turn into idx  */
+                  int gai_error, mmdb_status;
+                  geo_rc = MMDB_lookup_string(&geo_fp, hptr->string, &gai_error, &mmdb_status);
+                  if (mmdb_status == MMDB_SUCCESS && gai_error == 0 && geo_rc.found_entry) {
+                      MMDB_entry_data_s entry_data;
+                      mmdb_status = MMDB_get_value(&geo_rc.entry, &entry_data, "country", "iso_code", NULL);
+                      if (mmdb_status == MMDB_SUCCESS && entry_data.has_data) {
+                          if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING && entry_data.data_size == 2) {
+                              /* index returned geo_ctry */
+                              geo_ctry[0] = tolower(entry_data.utf8_string[0]);
+                              geo_ctry[1] = tolower(entry_data.utf8_string[1]);
+                              if (geo_ctry[0] >= 'a' && geo_ctry[0] <= 'z' && geo_ctry[1] >= 'a' && geo_ctry[1] <= 'z') {
+                                  idx = ctry_idx(geo_ctry);
+                              }
+                          }
+                      }
                   }
                }
 #endif /* USE_GEOIP */
