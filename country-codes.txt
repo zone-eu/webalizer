@@ -25,10 +25,11 @@ bg      Bulgaria
 bh      Bahrain
 bi      Burundi
 bj      Benin
-bl      Saint Barthelemy
+bl      St. Barthelemy
 bm      Bermuda
-bn      Brunei Darussalam
+bn      Brunei
 bo      Bolivia
+bq      Bonaire, Sint Eustatius and Saba
 br      Brazil
 bs      Bahamas
 bt      Bhutan
@@ -38,11 +39,11 @@ by      Belarus
 bz      Belize
 ca      Canada
 cc      Cocos (Keeling) Islands
-cd      Congo, Democratic Republic
+cd      DR Congo
 cf      Central African Republic
-cg      Congo
+cg      The Republic of the Congo
 ch      Switzerland
-ci      Cote D'Ivoire (Ivory Coast)
+ci      Ivory Coast
 ck      Cook Islands
 cl      Chile
 cm      Cameroon
@@ -51,6 +52,7 @@ co      Colombia
 cr      Costa Rica
 cu      Cuba
 cv      Cape Verde
+cw      Curacao
 cx      Christmas Island
 cy      Cyprus
 cz      Czech Republic
@@ -70,7 +72,7 @@ et      Ethiopia
 eu      European Union
 fi      Finland
 fj      Fiji
-fk      Falkland Islands (Malvinas)
+fk      Falkland Islands
 fm      Micronesia
 fo      Faroe Islands
 fr      France
@@ -118,15 +120,15 @@ kg      Kyrgyzstan
 kh      Cambodia
 ki      Kiribati
 km      Comoros
-kn      Saint Kitts and Nevis
-kp      Korea, Democratic Republic of
-kr      Korea, Republic of
+kn      St. Kitts and Nevis
+kp      North Korea
+kr      South Korea
 kw      Kuwait
 ky      Cayman Islands
 kz      Kazakhstan
 la      Laos
 lb      Lebanon
-lc      Saint Lucia
+lc      St. Lucia
 li      Liechtenstein
 lk      Sri Lanka
 lr      Liberia
@@ -139,14 +141,14 @@ ma      Morocco
 mc      Monaco
 md      Moldova
 me      Montenegro
-mf      Saint Martin (French part)
+mf      St. Martin
 mg      Madagascar
 mh      Marshall Islands
-mk      Macedonia
+mk      North Macedonia
 ml      Mali
 mm      Myanmar
 mn      Mongolia
-mo      Macau
+mo      Macao
 mp      Northern Mariana Islands
 mq      Martinique
 mr      Mauritania
@@ -169,7 +171,7 @@ no      Norway
 np      Nepal
 nr      Nauru
 nu      Niue
-nz      New Zealand (Aotearoa)
+nz      New Zealand
 om      Oman
 pa      Panama
 pe      Peru
@@ -179,9 +181,9 @@ ph      Philippines
 pk      Pakistan
 pl      Poland
 pm      St. Pierre and Miquelon
-pn      Pitcairn
+pn      Pitcairn Islands
 pr      Puerto Rico
-ps      Palestinian Territory, Occupied
+ps      Palestine
 pt      Portugal
 pw      Palau
 py      Paraguay
@@ -189,7 +191,7 @@ qa      Qatar
 re      Reunion
 ro      Romania
 rs      Serbia
-ru      Russian Federation
+ru      Russia
 rw      Rwanda
 sa      Saudi Arabia
 sb      Solomon Islands
@@ -199,18 +201,20 @@ se      Sweden
 sg      Singapore
 sh      St. Helena
 si      Slovenia
-sj      Svalbard and Jan Mayen Islands
+sj      Svalbard and Jan Mayen
 sk      Slovakia
 sl      Sierra Leone
 sm      San Marino
 sn      Senegal
 so      Somalia
 sr      Suriname
+ss      South Sudan
 st      Sao Tome and Principe
-su      Soviet Union
+su      Russia
 sv      El Salvador
-sy      Syrian Arab Republic
-sz      Swaziland
+sx      Sint Maarten
+sy      Syria
+sz      Eswatini
 tc      Turks and Caicos Islands
 td      Chad
 tf      French Southern Territories
@@ -218,7 +222,7 @@ tg      Togo
 th      Thailand
 tj      Tajikistan
 tk      Tokelau
-tl      Timor-Leste
+tl      East Timor
 tm      Turkmenistan
 tn      Tunisia
 to      Tonga
@@ -231,19 +235,20 @@ tz      Tanzania
 ua      Ukraine
 ug      Uganda
 uk      United Kingdom
-um      US Minor Outlying Islands
+um      U.S. Outlying Islands
 us      United States
 uy      Uruguay
 uz      Uzbekistan
-va      Vatican City State (Holy See)
-vc      Saint Vincent and the Grenadines
+va      Vatican City
+vc      St. Vincent and Grenadines
 ve      Venezuela
-vg      Virgin Islands (British)
-vi      Virgin Islands (U.S.)
-vn      Viet Nam
+vg      British Virgin Islands
+vi      U.S. Virgin Islands
+vn      Vietnam
 vu      Vanuatu
-wf      Wallis and Futuna Islands
+wf      Wallis and Futuna
 ws      Samoa
+xk      Kosovo
 ye      Yemen
 yt      Mayotte
 yu      Yugoslavia
