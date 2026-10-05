@@ -35,6 +35,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
+#include <arpa/inet.h>
 #ifdef USE_DNS
 #include <db.h>
 #endif
@@ -147,6 +148,42 @@ INODEPTR *i_array      = NULL;                /* ident strings (username) */
 u_int64_t a_ctr        = 0;                   /* counter for sort array   */
 
 FILE     *out_fp;
+
+static const char *anonymize_ip(const char *in, char *out, size_t out_size)
+{
+   unsigned char addr[16];
+
+   // If it is an IPv4 address...
+   if (inet_pton(AF_INET, in, addr) == 1) {
+      // .. zero the last octet
+      addr[3] = 0;
+      if (!inet_ntop(AF_INET, addr, out, out_size)) {
+         *out = '\0';
+      }
+      return out;
+   }
+
+   // If it is an IPv6 address...
+   if (inet_pton(AF_INET6, in, addr) == 1) {
+      // .. zero the last 80 bits
+      memset(addr + 6, 0, 10);
+      if (!inet_ntop(AF_INET6, addr, out, out_size)) {
+         *out = '\0';
+      }
+      return out;
+   }
+
+   size_t len = strlen(in);
+   if (len >= out_size) {
+      len = out_size - 1;
+   }
+
+   // Otherwise, return it as-is, maybe truncated
+   memcpy(out, in, len);
+   out[len] = '\0';
+
+   return out;
+}
 
 /*********************************************/
 /* WRITE_HTML_HEAD - output top of HTML page */
@@ -831,6 +868,7 @@ void top_sites_table(int flag)
    u_int64_t cnt=0, h_reg=0, h_grp=0, h_hid=0, tot_num;
    int       i;
    HNODEPTR  hptr, *pointer;
+   char anonymized_host[64];
 
    cnt=a_ctr; pointer=h_array;
    while(cnt--)
@@ -906,9 +944,9 @@ void top_sites_table(int flag)
 
          if ((hptr->flag==OBJ_GRP)&&hlite_groups)
              fprintf(out_fp,"<STRONG>%s</STRONG></FONT></TD></TR>\n",
-               hptr->string);
+               anonymize_ip(hptr->string, anonymized_host, sizeof(anonymized_host)));
          else fprintf(out_fp,"%s</FONT></TD></TR>\n",
-               hptr->string);
+               anonymize_ip(hptr->string, anonymized_host, sizeof(anonymized_host)));
          tot_num--;
          i++;
       }
@@ -945,6 +983,7 @@ int all_sites_page(u_int64_t h_reg, u_int64_t h_grp)
    char     site_fname[256], buffer[256];
    FILE     *out_fp;
    int      i=(h_grp)?1:0;
+   char anonymized_host[64];
 
    /* generate file name */
    snprintf(site_fname,sizeof(site_fname),"site_%04d%02d.%s",
@@ -979,7 +1018,7 @@ int all_sites_page(u_int64_t h_reg, u_int64_t h_grp)
             (t_file==0)?0:((float)hptr->files/t_file)*100.0,hptr->xfer/1024,
             (t_xfer==0)?0:((float)hptr->xfer/t_xfer)*100.0,hptr->visit,
             (t_visit==0)?0:((float)hptr->visit/t_visit)*100.0,
-            hptr->string);
+            anonymize_ip(hptr->string, anonymized_host, sizeof(anonymized_host)));
          h_grp--;
       }
    }
@@ -1001,7 +1040,7 @@ int all_sites_page(u_int64_t h_reg, u_int64_t h_grp)
             (t_file==0)?0:((float)hptr->files/t_file)*100.0,hptr->xfer/1024,
             (t_xfer==0)?0:((float)hptr->xfer/t_xfer)*100.0,hptr->visit,
             (t_visit==0)?0:((float)hptr->visit/t_visit)*100.0,
-            hptr->string);
+            anonymize_ip(hptr->string, anonymized_host, sizeof(anonymized_host)));
          h_reg--;
       }
    }
@@ -2149,6 +2188,7 @@ void dump_all_sites()
    FILE      *out_fp;
    char      filename[256];
    u_int64_t cnt=a_ctr;
+   char anonymized_host[64];
 
    /* generate file name */
    snprintf(filename,sizeof(filename),"%s/site_%04d%02d.%s",
@@ -2174,7 +2214,7 @@ void dump_all_sites()
          fprintf(out_fp,
          "%"PRIu64"\t%"PRIu64"\t%.0f\t%"PRIu64"\t%s\n",
             hptr->count,hptr->files,hptr->xfer/1024,
-            hptr->visit,hptr->string);
+            hptr->visit,anonymize_ip(hptr->string, anonymized_host, sizeof(anonymized_host)));
       }
       cnt--;
    }
